@@ -64,6 +64,7 @@ enum ad400x_ids {
 	ID_AD4020,
 	ID_AD4021,
 	ID_AD4022,
+	ID_ADAQ4003,
 };
 
 struct ad400x_chip_info {
@@ -127,6 +128,10 @@ static const struct ad400x_chip_info ad400x_chips[] = {
 	[ID_AD4022] = {
 		.chan_spec = AD400X_CHANNEL(20),
 		.max_rate  =  500000,
+	},
+	[ID_ADAQ4003] = {
+		.chan_spec = AD400X_CHANNEL(18),
+		.max_rate  =  2000000,
 	},
 };
 
@@ -424,6 +429,7 @@ static const struct spi_device_id ad400x_id[] = {
 	{"ad4020", ID_AD4020},
 	{"ad4021", ID_AD4021},
 	{"ad4022", ID_AD4022},
+	{"adaq4003", ID_ADAQ4003},
 	{}
 };
 MODULE_DEVICE_TABLE(spi, ad400x_id);
@@ -576,6 +582,7 @@ static const struct of_device_id ad400x_of_match[] = {
 	{ .compatible = "adi,ad4020", .data = (const void *)ID_AD4020 },
 	{ .compatible = "adi,ad4021", .data = (const void *)ID_AD4021 },
 	{ .compatible = "adi,ad4022", .data = (const void *)ID_AD4022 },
+	{ .compatible = "adi,adaq4003", .data = (const void *)ID_ADAQ4003 },
 	{ },
 };
 MODULE_DEVICE_TABLE(of, ad400x_of_match);
