@@ -499,13 +499,20 @@ static int ad400x_probe(struct spi_device *spi)
 	struct ad400x_state *st;
 	struct iio_dev *indio_dev;
 	struct iio_buffer *buffer;
-	int ret, dev_id;
+	enum ad400x_ids dev_id;
+	int ret;
 
 	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
 	if (!indio_dev)
 		return -ENOMEM;
 
-	dev_id = spi_get_device_id(spi)->driver_data;
+	dev_id = (enum ad400x_ids)device_get_match_data(&spi->dev);
+	if (!dev_id) {
+		dev_id = (enum ad400x_ids)spi_get_device_id(spi)->driver_data;
+		if (!dev_id)
+			return -EINVAL;
+	}
+
 	st = iio_priv(indio_dev);
 	st->spi = spi;
 	mutex_init(&st->lock);
@@ -556,19 +563,19 @@ static int ad400x_probe(struct spi_device *spi)
 }
 
 static const struct of_device_id ad400x_of_match[] = {
-	{ .compatible = "adi,ad4000" },
-	{ .compatible = "adi,ad4001" },
-	{ .compatible = "adi,ad4002" },
-	{ .compatible = "adi,ad4003" },
-	{ .compatible = "adi,ad4004" },
-	{ .compatible = "adi,ad4005" },
-	{ .compatible = "adi,ad4006" },
-	{ .compatible = "adi,ad4007" },
-	{ .compatible = "adi,ad4008" },
-	{ .compatible = "adi,ad4011" },
-	{ .compatible = "adi,ad4020" },
-	{ .compatible = "adi,ad4021" },
-	{ .compatible = "adi,ad4022" },
+	{ .compatible = "adi,ad4000", .data = (const void *)ID_AD4000 },
+	{ .compatible = "adi,ad4001", .data = (const void *)ID_AD4001 },
+	{ .compatible = "adi,ad4002", .data = (const void *)ID_AD4002 },
+	{ .compatible = "adi,ad4003", .data = (const void *)ID_AD4003 },
+	{ .compatible = "adi,ad4004", .data = (const void *)ID_AD4004 },
+	{ .compatible = "adi,ad4005", .data = (const void *)ID_AD4005 },
+	{ .compatible = "adi,ad4006", .data = (const void *)ID_AD4006 },
+	{ .compatible = "adi,ad4007", .data = (const void *)ID_AD4007 },
+	{ .compatible = "adi,ad4008", .data = (const void *)ID_AD4008 },
+	{ .compatible = "adi,ad4011", .data = (const void *)ID_AD4011 },
+	{ .compatible = "adi,ad4020", .data = (const void *)ID_AD4020 },
+	{ .compatible = "adi,ad4021", .data = (const void *)ID_AD4021 },
+	{ .compatible = "adi,ad4022", .data = (const void *)ID_AD4022 },
 	{ },
 };
 MODULE_DEVICE_TABLE(of, ad400x_of_match);
