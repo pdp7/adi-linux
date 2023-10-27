@@ -218,7 +218,8 @@ static int axi_pwmgen_remove(struct platform_device *pdev)
 {
 	struct axi_pwmgen *pwm = platform_get_drvdata(pdev);
 
-	return pwmchip_remove(&pwm->chip);
+	pwmchip_remove(&pwm->chip); // returns void upstream?
+	return 0;
 }
 static struct platform_driver axi_pwmgen_driver = {
 	.driver = {
